@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block context %}
-  <h2>Стартовая страница</h2>
+  <img src="{% static 'img/background.jpg' %}" class="img-fluid" alt="...">
+  <p class="text-center fw-bold fs-3 mt-3">Тайный санта.</p>
+  <p class="text-center">
+    Организуй тайный обмен подарками между <br>друзьями или коллегами
+  </p>
+  <div class="d-grid gap-2 col-3 mx-auto">
+    <a class="btn btn-danger" href="#" role="button">создать игру</a>
+  </div>
 {% endblock %}

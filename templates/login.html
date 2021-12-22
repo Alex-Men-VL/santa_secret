@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block context %}
+  <div class="container-fluid">
+    <h1>Пожалуйста, авторизуйтесь</h1>
+    <h4>С паролем:</h4>
+    <div class="alert alert-primary" role="alert">
+      Нет аккаунта?
+      <a href="{% url 'signup' %}">Зарегистрироваться</a>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Войти</button>
+    </form>
+  </div>
+{% endblock %}

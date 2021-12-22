@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block context %}
+  <div class="container-fluid">
+    <h1>Регистрация</h1>
+
+    <form class="row g-3 needs-validation" method="post">
+      {% csrf_token %}
+
+      {% for f in form %}
+        <div class="mb-4">
+          <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}:</label>
+          {{ f }}
+          <div class="form-error">
+            {{ f.errors }}
+          </div>
+        </div>
+      {% endfor %}
+      <div class="col-12">
+        <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

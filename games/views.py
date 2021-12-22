@@ -1,5 +1,4 @@
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -19,14 +18,13 @@ class RegisterUser(CreateView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        users_count = User.objects.count()
-        user.username = f'user{users_count + 1}'
+        user.username = form.cleaned_data["email"].split('@')[0]
         user.save()
         return super(RegisterUser, self).form_valid(form)
 
 
 class LoginUser(LoginView):
-    form_class = AuthenticationForm
+    form_class = forms.LoginUserForm
     template_name = 'login.html'
 
     def get_success_url(self):

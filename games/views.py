@@ -16,12 +16,18 @@ def index(request):
 class RegisterUser(CreateView):
     def get(self, request, *args, **kwargs):
         form = forms.RegisterUserForm
-        return render(request, 'register.html', {'form': form})
+        context = {
+            'form': form
+        }
+        return render(request, 'register.html', context=context)
 
     def post(self, request, *args, **kwargs):
         form = forms.RegisterUserForm(request.POST)
         if not form.is_valid():
-            return render(request, 'register.html', {'form': form})
+            context = {
+                'form': form
+            }
+            return render(request, 'register.html', context=context)
         user = form.save(commit=False)
         username = form.cleaned_data['email'].split('@')[0]
         user.username = username
@@ -40,22 +46,31 @@ class LoginUser(LoginView):
         return reverse_lazy('index')
 
 
-def new_game(request):
-    if request.method == 'POST':
+class GameCreate(CreateView):
+    fields = ['title', 'cost_limit', 'registration_end', 'dispatch_date']
+
+    def get(self, request, *args, **kwargs):
+        form = forms.AddGameForm
+        context = {
+            'form': form,
+            'title': 'Создание игры',
+            'button': 'Создать игру',
+        }
+        return render(request, 'games/new_game.html', context=context)
+
+    def post(self, request, *args, **kwargs):
         form = forms.AddGameForm(request.POST)
-        if form.is_valid():
-            game = form.save(commit=False)
-            game.owner = request.user
-            game.save()
-            return redirect('my_games')
-    else:
-        form = forms.AddGameForm()
-    context = {
-        'form': form,
-        'title': 'Создание игры',
-        'button': 'Создать игру',
-    }
-    return render(request, 'games/new_game.html', context=context)
+        if not form.is_valid():
+            context = {
+                'form': form,
+                'title': 'Создание игры',
+                'button': 'Создать игру',
+            }
+            return render(request, 'games/new_game.html', context=context)
+        game = form.save(commit=False)
+        game.owner = request.user
+        game.save()
+        return redirect('my_games')
 
 
 def user_games(request):

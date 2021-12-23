@@ -21,7 +21,6 @@
         <p class="card-text">Период регистрации участников: {{ game.registration_end|date:"F j, Y" }}</p>
         <p class="card-text">Период отправки подарка: {{ game.dispatch_date|date:"F j, Y" }}</p>
         {% url 'game_join' slug=game.slug as the_url %}
-{#        <p class="card-text">Ссылка на регистрацию в игре: <a href="{% url 'game_join' slug=game.slug %}">{{ base_url }}{{ the_url }}</a></p>#}
         <fieldset disabled>
           <div class="mb-3 col-md-6">
             <label for="disabledTextInput" class="form-label">Ссылка на игру</label>

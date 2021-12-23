@@ -13,5 +13,4 @@ class GameAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Profile)
 admin.site.register(Game, GameAdmin)

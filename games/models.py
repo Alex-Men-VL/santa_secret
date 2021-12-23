@@ -21,6 +21,7 @@ class Profile(models.Model):
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
+        verbose_name='Участник',
     )
     game = models.ForeignKey(
         'Game',

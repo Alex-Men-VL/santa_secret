@@ -35,6 +35,17 @@ class RegisterUserForm(UserCreationForm):
             'review ': '',
         }
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        try:
+            User.objects.get(email=email)
+            raise ValidationError(
+                'Пользователь с данным email уже зарегистрирован'
+            )
+        except User.DoesNotExist:
+            pass
+        return email
+
 
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(
@@ -60,7 +71,7 @@ class AddGameForm(forms.ModelForm):
     title = forms.CharField(
         label='Название игры',
         widget=forms.TextInput(attrs={'placeholder': 'Тайный Санта 2022'})
-       )
+    )
 
     cost_limit = forms.ChoiceField(
         label='Стоимость подарка',

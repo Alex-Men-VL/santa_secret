@@ -1,11 +1,12 @@
+import requests
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.utils import timezone
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 
 from . import forms
-from .models import Game
+from .models import Game, COSTS
 
 
 def index(request):
@@ -13,15 +14,22 @@ def index(request):
 
 
 class RegisterUser(CreateView):
-    form_class = forms.RegisterUserForm
-    template_name = 'register.html'
-    success_url = reverse_lazy('login')
+    def get(self, request, *args, **kwargs):
+        form = forms.RegisterUserForm
+        return render(request, 'register.html', {'form': form})
 
-    def form_valid(self, form):
+    def post(self, request, *args, **kwargs):
+        form = forms.RegisterUserForm(request.POST)
+        if not form.is_valid():
+            return render(request, 'register.html', {'form': form})
         user = form.save(commit=False)
-        user.username = form.cleaned_data["email"].split('@')[0]
+        username = form.cleaned_data['email'].split('@')[0]
+        user.username = username
         user.save()
-        return super(RegisterUser, self).form_valid(form)
+        password = form.cleaned_data['password1']
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        return redirect('index')
 
 
 class LoginUser(LoginView):
@@ -36,7 +44,9 @@ def new_game(request):
     if request.method == 'POST':
         form = forms.AddGameForm(request.POST)
         if form.is_valid():
-            form.save()
+            game = form.save(commit=False)
+            game.owner = request.user
+            game.save()
             return redirect('index')
     else:
         form = forms.AddGameForm()
@@ -45,3 +55,25 @@ def new_game(request):
         'title': 'Создание игры'
     }
     return render(request, 'games/new_game.html', context=context)
+
+
+def user_games(request):
+    try:
+        user = request.user
+        user_games = Game.objects.filter(owner=user)
+        costs = {i[0]: i[1] for i in COSTS}
+        context = {
+            'games': user_games,
+            'games_count': user_games.count(),
+            'costs': costs,
+        }
+    except TypeError:
+        context = {
+            'games_count': 0,
+        }
+    return render(request, 'games/user_games.html', context=context)
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('login')

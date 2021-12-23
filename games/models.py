@@ -50,6 +50,12 @@ class Profile(models.Model):
 
 
 class Game(models.Model):
+    owner = models.ForeignKey(
+        User,
+        related_name='games',
+        verbose_name='Организатор',
+        on_delete=models.PROTECT,
+    )
     title = models.CharField(
         'Название',
         max_length=200,

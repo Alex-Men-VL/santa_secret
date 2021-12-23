@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block context %}
+  {% if games_count == 0 %}
+    <div class="container">
+      <h1 class="text-center">У вас пока нет созданных игр</h1>
+        <div class="d-grid gap-2 col-3 mx-auto">
+          <a class="btn btn-danger" href="{% url 'new_game' %}" role="button">создать игру</a>
+        </div>
+    </div>
+  {% endif %}
+  {% for game in games %}
+    <div class="card">
+      <h5 class="card-header">{{ game.title }}</h5>
+      <div class="card-body">
+        {% for key, value in costs.items %}
+          {% if key == game.cost_limit %}
+            <p class="card-text ">Стоимость подарка: {{ value }}</p>
+          {% endif %}
+        {% endfor %}
+        <p class="card-text">Период регистрации участников: {{ game.registration_end|date:"F j, Y" }}</p>
+        <p class="card-text">Период отправки подарка: {{ game.dispatch_date|date:"F j, Y" }}</p>
+        <a href="#" class="btn btn-danger">Изменить</a>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

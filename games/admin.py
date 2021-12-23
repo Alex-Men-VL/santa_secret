@@ -8,6 +8,7 @@ class UserInline(admin.TabularInline):
 
 
 class GameAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug')
     inlines = [
         UserInline,
     ]

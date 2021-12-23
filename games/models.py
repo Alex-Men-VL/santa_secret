@@ -1,3 +1,6 @@
+import string
+import random
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
@@ -12,8 +15,9 @@ COSTS = (
 
 
 def get_slug():
-    games_count = Game.objects.count()
-    slug = f'secret_santa_{games_count+1}'
+    letters_and_digits = string.ascii_letters + string.digits
+    length = 10
+    slug = ''.join(random.sample(letters_and_digits, length))
     return slug
 
 

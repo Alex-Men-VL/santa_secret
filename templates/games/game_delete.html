@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block context %}
+  <div class="container-fluid">
+    <h1>Удалить игру</h1>
+
+    <form method="post">
+      {% csrf_token %}
+      <p>Вы уверены, что хотите удалить игру "{{ game.title }}"</p>
+      <div class="col-12">
+        <button class="btn btn-danger" type="submit">Удалить</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

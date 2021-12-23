@@ -20,7 +20,7 @@
         {% endfor %}
         <p class="card-text">Период регистрации участников: {{ game.registration_end|date:"F j, Y" }}</p>
         <p class="card-text">Период отправки подарка: {{ game.dispatch_date|date:"F j, Y" }}</p>
-        <a href="#" class="btn btn-danger">Изменить</a>
+        <a href="{% url 'game_delete' slug=game.slug %}" class="btn btn-danger">Удалить</a>
       </div>
     </div>
   {% endfor %}

@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DeleteView
 
 from . import forms
 from .models import Game, COSTS
@@ -51,7 +51,8 @@ def new_game(request):
         form = forms.AddGameForm()
     context = {
         'form': form,
-        'title': 'Создание игры'
+        'title': 'Создание игры',
+        'button': 'Создать игру',
     }
     return render(request, 'games/new_game.html', context=context)
 
@@ -59,11 +60,11 @@ def new_game(request):
 def user_games(request):
     try:
         user = request.user
-        user_games = Game.objects.filter(owner=user)
+        games = Game.objects.filter(owner=user)
         costs = {i[0]: i[1] for i in COSTS}
         context = {
-            'games': user_games,
-            'games_count': user_games.count(),
+            'games': games,
+            'games_count': games.count(),
             'costs': costs,
         }
     except TypeError:
@@ -76,3 +77,9 @@ def user_games(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
+class GameDelete(DeleteView):
+    model = Game
+    template_name = 'games/game_delete.html'
+    success_url = reverse_lazy('my_games')

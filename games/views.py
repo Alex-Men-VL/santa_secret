@@ -1,10 +1,11 @@
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import CreateView
 
 from . import forms
+from .models import Game
 
 
 def index(request):
@@ -29,3 +30,18 @@ class LoginUser(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('index')
+
+
+def new_game(request):
+    if request.method == 'POST':
+        form = forms.AddGameForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = forms.AddGameForm()
+    context = {
+        'form': form,
+        'title': 'Создание игры'
+    }
+    return render(request, 'games/new_game.html', context=context)

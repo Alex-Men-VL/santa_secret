@@ -56,7 +56,7 @@ class Game(models.Model):
         db_index=True,
     )
     cost_limit = models.CharField(
-        'Стоимость',
+        'Стоимость подарка',
         max_length=30,
         choices=COSTS,
         default='ANY',

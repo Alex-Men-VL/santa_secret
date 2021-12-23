@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
@@ -60,12 +61,13 @@ def new_game(request):
 def user_games(request):
     try:
         user = request.user
-        games = Game.objects.filter(owner=user)
+        games = Game.objects.filter(owner=user).order_by('-pk')
         costs = {i[0]: i[1] for i in COSTS}
         context = {
             'games': games,
             'games_count': games.count(),
             'costs': costs,
+            'base_url': settings.BASE_URL
         }
     except TypeError:
         context = {
@@ -83,3 +85,7 @@ class GameDelete(DeleteView):
     model = Game
     template_name = 'games/game_delete.html'
     success_url = reverse_lazy('my_games')
+
+
+def game_join(request, slug):
+    return redirect('index')

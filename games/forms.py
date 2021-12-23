@@ -86,7 +86,7 @@ class AddGameForm(forms.ModelForm):
 
     dispatch_date = forms.DateField(
         label='Дата отправки подарков',
-        widget=forms.SelectDateWidget,
+        widget=MyDateInput,
     )
 
     class Meta:

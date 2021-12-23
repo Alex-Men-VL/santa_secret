@@ -46,7 +46,7 @@ def new_game(request):
             game = form.save(commit=False)
             game.owner = request.user
             game.save()
-            return redirect('index')
+            return redirect('my_games')
     else:
         form = forms.AddGameForm()
     context = {

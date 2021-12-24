@@ -20,6 +20,9 @@
         {% endfor %}
         <p class="card-text">Период регистрации участников: {{ game.registration_end|date:"F j, Y" }}</p>
         <p class="card-text">Период отправки подарка: {{ game.dispatch_date|date:"F j, Y" }}</p>
+        {% if game.owner_joined %}
+          <p class="card-text">Вы присоединились к игре</p>
+        {% endif %}
         {% url 'game_join' slug=game.slug as the_url %}
         <fieldset disabled>
           <div class="mb-3 col-md-6">
@@ -28,8 +31,10 @@
   {#          <button type="button" class="btn-clipboard" title="" data-bs-original-title="Копировать в буфер обмена">Копировать</button>#}
           </div>
         </fieldset>
-        <a href="#" class="btn btn-danger mb-3">Присоединиться к игре</a><br>
-        <a href="{% url 'game_delete' slug=game.slug %}" class="btn btn-danger">Удалить игру</a>
+        {% if not game.owner_joined %}
+          <a href="{% url 'game_join' slug=game.slug %}" class="btn btn-danger mb-3">Присоединиться к игре</a><br>
+        {% endif %}
+        <a href="{% url 'game_delete' slug=game.slug %}" class="btn btn-danger mb-3">Удалить игру</a>
       </div>
     </div>
   {% endfor %}

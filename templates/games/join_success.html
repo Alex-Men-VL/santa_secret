@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block context %}
+  <div class="card">
+      <h5 class="card-header">Вы успешно присоединились к игре!</h5>
+      <div class="card-body">
+        <h6 class="catd-text">Информация об игре:</h6>
+        <p class="card-text">Название: {{ game.title }}</p>
+        <p class="card-text">Период отправки подарка: {{ game.dispatch_date|date:"F j, Y" }}</p>
+        <p class="card-text">Превосходно, ты в игре! {{ game.registration_end|date:"d.m.Y" }} мы проведем жеребьевку, и ты узнаешь имя и контакты своего тайного друга. <br> Ему и нужно будет вручить подарок!</p>
+        <a href="{% url 'index' %}" class="btn btn-danger mb-3">Вернуться на главную страницу</a><br>
+      </div>
+    </div>
+{% endblock %}

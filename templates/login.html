@@ -6,9 +6,8 @@
     <h4>С паролем:</h4>
     <div class="alert alert-primary" role="alert">
       Нет аккаунта?
-      <a href="{% url 'signup' %}">Зарегистрироваться</a>
+      <a href="{% url 'signup' %}?next={{ next }}">Зарегистрироваться</a>
     </div>
-
     <form method="post">
       {% csrf_token %}
       {% for f in form %}

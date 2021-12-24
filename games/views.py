@@ -1,12 +1,14 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
-from django.shortcuts import redirect, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView
 
 from . import forms
-from .models import Game, COSTS
+from .models import Game, COSTS, Profile
 
 
 def index(request):
@@ -35,6 +37,9 @@ class RegisterUser(CreateView):
         password = form.cleaned_data['password1']
         user = authenticate(username=username, password=password)
         login(request, user)
+        path = self.request.GET.get('next')
+        if path:
+            return HttpResponseRedirect(path)
         return redirect('index')
 
 
@@ -43,6 +48,9 @@ class LoginUser(LoginView):
     template_name = 'login.html'
 
     def get_success_url(self):
+        path = self.request.GET.get("next")
+        if path:
+            return path
         return reverse_lazy('index')
 
 
@@ -82,7 +90,7 @@ def user_games(request):
             'games': games,
             'games_count': games.count(),
             'costs': costs,
-            'base_url': settings.BASE_URL
+            'base_url': settings.BASE_URL,
         }
     except TypeError:
         context = {
@@ -102,5 +110,15 @@ class GameDelete(DeleteView):
     success_url = reverse_lazy('my_games')
 
 
+@login_required
 def game_join(request, slug):
-    return redirect('index')
+    game = get_object_or_404(Game, slug=slug)
+    user = get_object_or_404(Profile, user=request.user)
+    game.players.add(user)
+    if game.owner == request.user:
+        game.owner_joined = True
+        game.save()
+    context = {
+        'game': game,
+    }
+    return render(request, 'games/join_success.html', context=context)

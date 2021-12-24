@@ -83,6 +83,10 @@ class Game(models.Model):
         default=get_slug,
         db_index=True,
     )
+    owner_joined = models.BooleanField(
+        'Владелец присоединился к игре',
+        default=False,
+    )
 
     def __str__(self):
         return f'{self.slug}'

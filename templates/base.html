@@ -21,7 +21,7 @@
           <li class="nav-item"><a href="{% url 'my_games' %}" class="nav-link"><span class="text-danger">Мои игры</span></a></li>
           <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link"><span class="text-danger">Выход</span></a></li>
         {% else %}
-          <li class="nav-item"><a href="{% url 'login' %}" class="nav-link"><span class="text-danger">Вход и регистрация</span></a></li>
+          <li class="nav-item"><a href="{% url 'login' %}?next={{ next }}" class="nav-link"><span class="text-danger">Вход и регистрация</span></a></li>
         {% endif %}
       </ul>
     </header>

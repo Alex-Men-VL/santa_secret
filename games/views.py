@@ -41,14 +41,21 @@ class LoginUser(LoginView):
 
 class GameCreate(CreateView):
     model = Game
-    template_name = 'games/new_game.html'
+    template_name = 'games/game_edit.html'
     form_class = forms.AddGameForm
+    success_url = reverse_lazy('user_games')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'title': 'Создать игру',
+            'button': 'Создать игру',
+        })
+        return context
 
     def form_valid(self, form):
-        game = form.save(commit=False)
-        game.owner = self.request.user
-        game.save()
-        return redirect('user_games')
+        form.instance.owner = self.request.user
+        return super(GameCreate, self).form_valid(form)
 
 
 def user_games(request):
@@ -104,9 +111,20 @@ class AddUserPrefers(UpdateView):
     template_name = 'games/users_preferences.html'
     form_class = forms.UsersPreferencesForm
 
-    # def form_valid(self, form):
-    #     form.instance.user = self.request.user
-    #     return super(AddUserPrefers, self).form_valid(form)
-
     def get_success_url(self):
         return reverse("index")
+
+
+class GameEdit(UpdateView):
+    model = Game
+    template_name = 'games/game_edit.html'
+    form_class = forms.AddGameForm
+    success_url = reverse_lazy('user_games')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'title': 'Изменить игру',
+            'button': 'Применить изменения',
+        })
+        return context

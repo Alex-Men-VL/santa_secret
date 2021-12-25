@@ -18,6 +18,7 @@
 
       <ul class="nav nav-pills">
         {% if request.user.is_authenticated %}
+          <li class="nav-item"><a href="{% url 'new_game' %}" class="nav-link"><span class="text-danger">Создать игру</span></a></li>
           <li class="nav-item"><a href="{% url 'user_games' %}" class="nav-link"><span class="text-danger">Мои игры</span></a></li>
           <li class="nav-item"><a href="{% url 'user_preferences' pk=request.user.id %}" class="nav-link"><span class="text-danger">Мои предпочтения</span></a></li>
           <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link"><span class="text-danger">Выход</span></a></li>

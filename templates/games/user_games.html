@@ -32,8 +32,9 @@
           </div>
         </fieldset>
         {% if not game.owner_joined %}
-          <a href="{% url 'game_join' slug=game.slug %}" class="btn btn-danger mb-3">Присоединиться к игре</a><br>
+          <a href="{% url 'game_join' slug=game.slug %}" class="btn btn-danger mb-3">Присоединиться к игре</a>
         {% endif %}
+        <a href="{% url 'game_edit' slug=game.slug pk=game.id %}" class="btn btn-danger mb-3">Изменить игру</a>
         <a href="{% url 'game_delete' slug=game.slug %}" class="btn btn-danger mb-3">Удалить игру</a>
       </div>
     </div>

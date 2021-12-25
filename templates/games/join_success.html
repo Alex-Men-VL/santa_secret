@@ -13,6 +13,9 @@
       </div>
     {% else %}
       <h5 class="card-header">{{ title }}</h5>
+      <div class="card-body">
+        <a href="{% url 'index' %}" class="btn btn-danger mb-3">Вернуться на главную страницу</a><br>
+      </div>
     {% endif %}
   </div>
 {% endblock %}

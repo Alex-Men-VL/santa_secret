@@ -91,10 +91,9 @@ class GameDelete(DeleteView):
 @login_required
 def game_join(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    if game.registration_end <= timezone.now().date():
+    user = get_object_or_404(Profile, user=request.user)
+    if game.registration_end >= timezone.now().date():
         registration_is_possible = True
-        user = get_object_or_404(Profile, user=request.user)
-
         if user in game.players.all():
             title = 'Вы уже присоединились к игре!'
         else:

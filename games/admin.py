@@ -71,7 +71,7 @@ class GameAdmin(admin.ModelAdmin):
                         preferences=preferences,
                         not_preferences=not_preferences,
                         our_site=settings.BASE_URL,
-                        cost_limit = game.cost_limit,
+                        cost_limit=game.cost_limit,
                         dispatch_date=game.dispatch_date
                     ),
                     settings.EMAIL_HOST_USER,

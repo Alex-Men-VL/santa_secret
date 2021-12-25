@@ -97,6 +97,10 @@ class Game(models.Model):
         'Владелец присоединился к игре',
         default=False,
     )
+    draw_done = models.BooleanField(
+        'Жеребьевка проведена?',
+        default=False,
+    )
 
     def __str__(self):
         return f'{self.slug}'

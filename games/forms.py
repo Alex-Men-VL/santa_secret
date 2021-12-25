@@ -15,7 +15,7 @@ class RegisterUserForm(UserCreationForm):
         label='Ваше имя',
         widget=forms.TextInput
     )
-    email = forms.CharField(
+    email = forms.EmailField(
         label='Email',
         widget=forms.EmailInput
     )

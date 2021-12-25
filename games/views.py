@@ -114,11 +114,16 @@ class GameDelete(DeleteView):
 def game_join(request, slug):
     game = get_object_or_404(Game, slug=slug)
     user = get_object_or_404(Profile, user=request.user)
+    if user in game.players.all():
+        title = 'Вы уже присоединились к игре!'
+    else:
+        title = 'Вы успешно присоединились к игре!'
     game.players.add(user)
     if game.owner == request.user:
         game.owner_joined = True
         game.save()
     context = {
+        'title': title,
         'game': game,
     }
     return render(request, 'games/join_success.html', context=context)

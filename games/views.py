@@ -2,12 +2,13 @@ from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, UpdateView
 
 from . import forms
-from .models import Game, COSTS, Profile
+from .models import COSTS, Game, Profile
 
 
 def index(request):
@@ -90,19 +91,29 @@ class GameDelete(DeleteView):
 @login_required
 def game_join(request, slug):
     game = get_object_or_404(Game, slug=slug)
-    user = get_object_or_404(Profile, user=request.user)
-    if user in game.players.all():
-        title = 'Вы уже присоединились к игре!'
+    if game.registration_end <= timezone.now().date():
+        registration_is_possible = True
+        user = get_object_or_404(Profile, user=request.user)
+
+        if user in game.players.all():
+            title = 'Вы уже присоединились к игре!'
+        else:
+            title = 'Вы успешно присоединились к игре!'
+        game.players.add(user)
+        if game.owner == request.user:
+            game.owner_joined = True
+            game.save()
+
+        context = {
+            'title': title,
+            'game': game,
+        }
     else:
-        title = 'Вы успешно присоединились к игре!'
-    game.players.add(user)
-    if game.owner == request.user:
-        game.owner_joined = True
-        game.save()
-    context = {
-        'title': title,
-        'game': game,
-    }
+        registration_is_possible = False
+        context = {
+            'title': 'Срок регистрации в игре закончился',
+        }
+    context.update({'registration_is_possible': registration_is_possible})
     return render(request, 'games/join_success.html', context=context)
 
 

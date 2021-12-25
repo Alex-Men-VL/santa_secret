@@ -1,0 +1,13 @@
+.alert1 {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius:.25rem;
+    transform: translateY(-20000%);
+    transition: .6s;
+}
+
+.alert1.active {
+    transform: translateY(0%);
+}

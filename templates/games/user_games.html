@@ -9,6 +9,7 @@
         </div>
     </div>
   {% endif %}
+  <div class="alert1 alert-success" id="successMessage">Ссылка скопирована!</div>
   {% for game in games %}
     <div class="card">
       <h5 class="card-header">{{ game.title }}</h5>
@@ -27,8 +28,7 @@
         <fieldset disabled>
           <div class="mb-3 col-md-6">
             <label for="disabledTextInput" class="form-label">Ссылка на игру</label>
-            <input type="text" id="disabledTextInput" class="form-control" value="{{ base_url }}{{ the_url }}">
-  {#          <button type="button" class="btn-clipboard" title="" data-bs-original-title="Копировать в буфер обмена">Копировать</button>#}
+            <input type="text" id="clickBoardInput" class="form-control" value="{{ base_url }}{{ the_url }}" readonly>
           </div>
         </fieldset>
         {% if not game.owner_joined %}

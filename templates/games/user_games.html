@@ -9,7 +9,6 @@
         </div>
     </div>
   {% endif %}
-  <div class="alert1 alert-success" id="successMessage">Ссылка скопирована!</div>
   {% for game in games %}
     <div class="card">
       <h5 class="card-header">{{ game.title }}</h5>
@@ -26,8 +25,8 @@
         {% endif %}
         {% url 'game_join' slug=game.slug as the_url %}
         <fieldset disabled>
-          <div class="mb-3 col-md-6">
-            <label for="disabledTextInput" class="form-label">Ссылка на игру</label>
+          <div class="ml-0 mb-3 col-md-5">
+            <label for="disabledTextInput" class="form-label" id="popupBtn">Ссылка на игру</label>
             <input type="text" id="clickBoardInput" class="form-control" value="{{ base_url }}{{ the_url }}" readonly>
           </div>
         </fieldset>
@@ -39,4 +38,11 @@
       </div>
     </div>
   {% endfor %}
+  <div id="mypopup" class="myPopup">
+    <div class="popup-content">
+      <div class="popup-body">
+        <p>Текст скопирован</p>
+      </div>
+    </div>
+  </div>
 {% endblock %}

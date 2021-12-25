@@ -18,8 +18,8 @@
             <p class="card-text ">Стоимость подарка: {{ value }}</p>
           {% endif %}
         {% endfor %}
-        <p class="card-text">Период регистрации участников: {{ game.registration_end|date:"F j, Y" }}</p>
-        <p class="card-text">Период отправки подарка: {{ game.dispatch_date|date:"F j, Y" }}</p>
+        <p class="card-text">Период регистрации участников: до {{ game.registration_end|date:"d.m.Y" }}</p>
+        <p class="card-text">Период отправки подарков: до {{ game.dispatch_date|date:"d.m.Y" }}</p>
         {% if game.owner_joined %}
           <p class="card-text">Вы присоединились к игре</p>
         {% endif %}

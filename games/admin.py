@@ -22,6 +22,7 @@ Email игрока: {email};
 
 class UserInline(admin.TabularInline):
     model = Profile
+    fields = ['user']
 
 
 class GameAdmin(admin.ModelAdmin):
@@ -86,3 +87,4 @@ class GameAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Game, GameAdmin)
+admin.site.register(Profile)

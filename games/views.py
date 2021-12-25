@@ -1,11 +1,10 @@
 from django.conf import settings
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DeleteView, UpdateView
 
 from . import forms
 from .models import Game, COSTS, Profile
@@ -16,30 +15,16 @@ def index(request):
 
 
 class RegisterUser(CreateView):
-    def get(self, request, *args, **kwargs):
-        form = forms.RegisterUserForm
-        context = {
-            'form': form
-        }
-        return render(request, 'register.html', context=context)
+    form_class = forms.RegisterUserForm
+    template_name = 'register.html'
+    success_url = reverse_lazy('login')
 
-    def post(self, request, *args, **kwargs):
-        form = forms.RegisterUserForm(request.POST)
-        if not form.is_valid():
-            context = {
-                'form': form
-            }
-            return render(request, 'register.html', context=context)
+    def form_valid(self, form):
         user = form.save(commit=False)
         username = form.cleaned_data['email'].split('@')[0]
         user.username = username
         user.save()
-        password = form.cleaned_data['password1']
-        user = authenticate(username=username, password=password)
-        login(request, user)
-        path = self.request.GET.get('next')
-        if path:
-            return HttpResponseRedirect(path)
+        login(self.request, user)
         return redirect('index')
 
 
@@ -55,30 +40,15 @@ class LoginUser(LoginView):
 
 
 class GameCreate(CreateView):
-    fields = ['title', 'cost_limit', 'registration_end', 'dispatch_date']
+    model = Game
+    template_name = 'games/new_game.html'
+    form_class = forms.AddGameForm
 
-    def get(self, request, *args, **kwargs):
-        form = forms.AddGameForm
-        context = {
-            'form': form,
-            'title': 'Создание игры',
-            'button': 'Создать игру',
-        }
-        return render(request, 'games/new_game.html', context=context)
-
-    def post(self, request, *args, **kwargs):
-        form = forms.AddGameForm(request.POST)
-        if not form.is_valid():
-            context = {
-                'form': form,
-                'title': 'Создание игры',
-                'button': 'Создать игру',
-            }
-            return render(request, 'games/new_game.html', context=context)
+    def form_valid(self, form):
         game = form.save(commit=False)
-        game.owner = request.user
+        game.owner = self.request.user
         game.save()
-        return redirect('my_games')
+        return redirect('user_games')
 
 
 def user_games(request):
@@ -107,7 +77,7 @@ def logout_user(request):
 class GameDelete(DeleteView):
     model = Game
     template_name = 'games/game_delete.html'
-    success_url = reverse_lazy('my_games')
+    success_url = reverse_lazy('user_games')
 
 
 @login_required
@@ -127,3 +97,16 @@ def game_join(request, slug):
         'game': game,
     }
     return render(request, 'games/join_success.html', context=context)
+
+
+class AddUserPrefers(UpdateView):
+    model = Profile
+    template_name = 'games/users_preferences.html'
+    form_class = forms.UsersPreferencesForm
+
+    # def form_valid(self, form):
+    #     form.instance.user = self.request.user
+    #     return super(AddUserPrefers, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse("index")

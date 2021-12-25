@@ -35,6 +35,16 @@ class Profile(models.Model):
         blank=True,
         null=True,
     )
+    preferences = models.TextField(
+        'Хотел бы получить',
+        blank=True,
+        null=True,
+    )
+    not_preferences = models.TextField(
+        'Не хотел бы получить',
+        blank=True,
+        null=True,
+    )
 
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):

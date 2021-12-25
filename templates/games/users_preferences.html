@@ -3,8 +3,8 @@
 {% block context %}
   {% if request.user.is_authenticated %}
     <div class="container-fluid">
-    <h1>Создание игры</h1>
-    <form action="{% url 'new_game' %}" method="post">
+    <h1></h1>
+    <form action="{% url 'user_preferences' pk=request.user.id %}" method="post">
       {% csrf_token %}
       {% for f in form %}
         <div class="mb-4">
@@ -16,7 +16,7 @@
         </div>
       {% endfor %}
       <div class="col-12">
-        <button class="btn btn-danger" type="submit">Создать игру</button>
+        <button class="btn btn-danger" type="submit">Сохранить изменения</button>
       </div>
     </form>
   </div>

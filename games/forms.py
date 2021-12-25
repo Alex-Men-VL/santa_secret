@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from .models import COSTS, Game
+from .models import COSTS, Game, Profile
 
 
 class RegisterUserForm(UserCreationForm):
@@ -106,3 +106,22 @@ class AddGameForm(forms.ModelForm):
         if dispatch_date < timezone.now().date():
             raise ValidationError('Укажите корректную дату отправки подарков')
         return dispatch_date
+
+
+class UsersPreferencesForm(forms.ModelForm):
+    preferences = forms.CharField(
+        label='Что хотели бы получить в подарок от Санты?',
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Например, я люблю книги'}
+        ),
+        required=False,
+    )
+    not_preferences = forms.CharField(
+        label='Что точно не дарить?',
+        widget=forms.TextInput(attrs={'placeholder': 'Не нужны носки'}),
+        required=False,
+    )
+
+    class Meta:
+        model = Profile
+        fields = ['preferences', 'not_preferences']

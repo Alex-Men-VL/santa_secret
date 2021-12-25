@@ -31,7 +31,7 @@ class Profile(models.Model):
         'Game',
         related_name='players',
         verbose_name='Игра',
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
     )

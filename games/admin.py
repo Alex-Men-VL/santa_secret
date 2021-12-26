@@ -2,7 +2,7 @@ from django.contrib import admin, messages
 
 
 from .models import Profile, Game
-from .utils import send_email_to_players
+from .email_utils import send_email_to_players
 
 
 class UserInline(admin.TabularInline):

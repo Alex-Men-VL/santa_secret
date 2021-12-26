@@ -10,7 +10,7 @@ from django.utils import timezone
 from django_apscheduler.jobstores import DjangoJobStore
 
 from games.models import Game
-from games.utils import send_email_to_owner, send_email_to_players
+from games.email_utils import send_email_to_owner, send_email_to_players
 
 logger = logging.getLogger(__name__)
 

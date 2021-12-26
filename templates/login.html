@@ -1,27 +1,28 @@
 {% extends 'base.html' %}
 
 {% block context %}
-  <div class="container-fluid">
-    <h1>Пожалуйста, авторизуйтесь</h1>
+  <div class="container">
+    <div class="py-5 text-center">
+      <h2>Пожалуйста, авторизуйтесь</h2>
+    </div>
     <h4>С паролем:</h4>
     <div class="alert alert-primary" role="alert">
       Нет аккаунта?
       <a href="{% url 'signup' %}?next={{ next }}">Зарегистрироваться</a>
     </div>
-    <form method="post">
-      {% csrf_token %}
-      {% for f in form %}
-        <div class="mb-4">
-          <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}:</label>
-          <br>{{ f }}
-          <div class="form-error">
-            {{ f.errors }}
-          </div>
+   <form method="post">
+    {% csrf_token %}
+    {% for f in form %}
+      <div class="mb-4 ">
+        {{ f }}
+        <div class="form-error">
+          {{ f.errors }}
         </div>
-      {% endfor %}
-      <div class="col-12">
-        <button class="btn btn-danger" type="submit">Войти</button>
       </div>
-    </form>
-  </div>
+    {% endfor %}
+    <div class="col-12">
+      <button class="btn btn-danger" type="submit">Войти</button>
+    </div>
+  </form>
+ </div>
 {% endblock %}

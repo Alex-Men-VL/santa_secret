@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 
 {% block context %}
-  <div class="container-fluid">
-    <h1>Регистрация</h1>
-
-    <form class="row g-3 needs-validation" method="post">
+  <div class="container">
+    <div class="py-5 text-center">
+      <h2>Регистрация</h2>
+    </div>
+    <h4>С паролем:</h4>
+    <div class="alert alert-primary" role="alert">
+      Уже зарегистрированы?
+      <a href="{% url 'signup' %}?next={{ next }}">Войти на сайт</a>
+    </div>
+    <form method="post">
       {% csrf_token %}
 
       {% for f in form %}
         <div class="mb-4">
-          <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}:</label>
-          <br>{{ f }}
+          {{ f }}
           <div class="form-error">
             {{ f.errors }}
           </div>

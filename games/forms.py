@@ -12,20 +12,16 @@ from .models import COSTS, Game, Profile
 
 class RegisterUserForm(UserCreationForm):
     first_name = forms.CharField(
-        label='Ваше имя',
-        widget=forms.TextInput
+        widget=forms.TextInput(attrs={'placeholder': 'Имя'}),
     )
     email = forms.EmailField(
-        label='Email',
-        widget=forms.EmailInput
+        widget=forms.EmailInput(attrs={'placeholder': 'Email'}),
     )
     password1 = forms.CharField(
-        label='Пароль',
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}),
     )
     password2 = forms.CharField(
-        label='Повторите пароль',
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={'placeholder': 'Повторите пароль'}),
     )
 
     class Meta:
@@ -49,12 +45,10 @@ class RegisterUserForm(UserCreationForm):
 
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(
-        label='Email',
-        widget=forms.EmailInput
+        widget=forms.EmailInput(attrs={'placeholder': 'Email'}),
     )
     password = forms.CharField(
-        label='Пароль',
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}),
     )
 
     class Meta:
@@ -111,14 +105,12 @@ class AddGameForm(forms.ModelForm):
 class UsersPreferencesForm(forms.ModelForm):
     preferences = forms.CharField(
         label='Что хотели бы получить в подарок от Санты?',
-        widget=forms.TextInput(
-            attrs={'placeholder': 'Например, я люблю книги'}
-        ),
+        widget=forms.Textarea(attrs={'placeholder': 'Например, я люблю книги'}),
         required=False,
     )
     not_preferences = forms.CharField(
         label='Что точно не дарить?',
-        widget=forms.TextInput(attrs={'placeholder': 'Не нужны носки'}),
+        widget=forms.Textarea(attrs={'placeholder': 'Не нужны носки'}),
         required=False,
     )
 

@@ -2,11 +2,19 @@
 
 {% load static %}
 {% block context %}
-  <p class="text-center fw-bold fs-3 mt-3">Тайный Санта</p>
-  <p class="text-center">
-    Организуй тайный обмен подарками между <br>друзьями или коллегами
-  </p>
-  <div class="d-grid gap-2 col-3 mx-auto">
-    <a class="btn btn-danger" href="{% url 'new_game' %}" role="button">Cоздать игру</a>
+  <div class="container">
+    <div class="py-5 text-center">
+      <h2>Тайный Санта</h2>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col">
+        <p class="text-center">
+          Организуй тайный обмен подарками между <br>друзьями или коллегами
+        </p>
+        <div class="d-grid gap-2 col-3 mx-auto">
+          <a class="btn btn-danger" href="{% url 'new_game' %}" role="button">Cоздать игру</a>
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}

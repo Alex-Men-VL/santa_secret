@@ -3,14 +3,20 @@
 {% block context %}
   {% if games_count == 0 %}
     <div class="container">
-      <h1 class="text-center">У вас пока нет созданных игр</h1>
-        <div class="d-grid gap-2 col-3 mx-auto">
-          <a class="btn btn-danger" href="{% url 'new_game' %}" role="button">Создать игру</a>
-        </div>
+      <div class="py-5 text-center">
+        <h2>У вас пока нет созданных игр</h2>
+      </div>
+      <div class="d-grid gap-2 col-3 mx-auto">
+        <a class="btn btn-danger" href="{% url 'new_game' %}" role="button">Создать игру</a>
+      </div>
     </div>
   {% endif %}
-  {% for game in games %}
-    <div class="card">
+  <div class="container">
+    <div class="py-5 text-center">
+      <h2>Ваши игры</h2>
+    </div>
+    {% for game in games %}
+    <div class="card mb-3">
       <h5 class="card-header">{{ game.title }}</h5>
       <div class="card-body">
         {% for key, value in costs.items %}
@@ -25,7 +31,7 @@
         {% endif %}
         {% url 'game_join' slug=game.slug as the_url %}
         <fieldset disabled>
-          <div class="ml-0 mb-3 col-md-5">
+          <div class="ml-0 mb-3 col-md-6">
             <label for="disabledTextInput" class="form-label" id="popupBtn">Ссылка на игру</label>
             <input type="text" id="clickBoardInput" class="form-control" value="{{ base_url }}{{ the_url }}" readonly>
           </div>
@@ -38,6 +44,7 @@
       </div>
     </div>
   {% endfor %}
+  </div>
   <div id="mypopup" class="myPopup">
     <div class="popup-content">
       <div class="popup-body">

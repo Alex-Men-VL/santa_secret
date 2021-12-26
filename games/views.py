@@ -19,7 +19,7 @@ def index(request):
 
 class RegisterUser(CreateView):
     form_class = forms.RegisterUserForm
-    template_name = 'register.html'
+    template_name = 'registration/register.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -44,7 +44,7 @@ class RegisterUser(CreateView):
 
 class LoginUser(LoginView):
     form_class = forms.LoginUserForm
-    template_name = 'login.html'
+    template_name = 'registration/login.html'
 
     def get_success_url(self):
         path = self.request.GET.get("next")
@@ -55,7 +55,7 @@ class LoginUser(LoginView):
 
 class UserAccount(UpdateView):
     model = User
-    template_name = 'register.html'
+    template_name = 'registration/register.html'
     fields = ['first_name', 'email']
 
     def get_context_data(self, **kwargs):
@@ -63,6 +63,7 @@ class UserAccount(UpdateView):
         context.update({
             'title': 'Личные данные',
             'button': 'Сохранить',
+            'user_id': kwargs.get('pk'),
         })
         return context
 

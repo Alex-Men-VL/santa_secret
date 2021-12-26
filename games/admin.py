@@ -13,6 +13,7 @@ class UserInline(admin.TabularInline):
 class GameAdmin(admin.ModelAdmin):
     list_display = ('title', 'slug')
     list_filter = ['draw_done']
+    readonly_fields = ['slug']
     inlines = [
         UserInline,
     ]

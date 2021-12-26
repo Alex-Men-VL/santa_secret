@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_list_or_404, get_object_or_404, redirect, \
+    render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, UpdateView
@@ -121,7 +123,7 @@ def game_join(request, slug):
 
 class AddUserPrefers(UpdateView):
     model = Profile
-    template_name = 'games/users_preferences.html'
+    template_name = 'games/user_preferences.html'
     form_class = forms.UsersPreferencesForm
 
     def get_success_url(self):
@@ -141,3 +143,12 @@ class GameEdit(UpdateView):
             'button': 'Применить изменения',
         })
         return context
+
+
+def users_preferences(request):
+    users = Profile.objects.exclude(preferences=None)
+    preferences = [user.preferences for user in users]
+    context = {
+        'preferences': preferences,
+    }
+    return render(request, 'games/preferences.html', context=context)

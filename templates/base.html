@@ -19,7 +19,7 @@
       <ul class="nav nav-pills">
         {% if request.user.is_authenticated %}
           <li class="nav-item"><a href="{% url 'new_game' %}" class="nav-link"><span class="text-danger">Создать игру</span></a></li>
-          <li class="nav-item"><a href="{% url 'new_game' %}" class="nav-link"><span class="text-danger">Примеры вишлистов</span></a></li>
+          <li class="nav-item"><a href="{% url 'users_preferences' %}" class="nav-link"><span class="text-danger">Примеры вишлистов</span></a></li>
           <div class="dropdown">
             <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               Персональная информация

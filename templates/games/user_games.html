@@ -10,8 +10,8 @@
         <a class="btn btn-danger" href="{% url 'new_game' %}" role="button">Создать игру</a>
       </div>
     </div>
-  {% endif %}
-  <div class="container">
+  {% else %}
+    <div class="container">
     <div class="py-5 text-center">
       <h2>Ваши игры</h2>
     </div>
@@ -45,6 +45,7 @@
     </div>
   {% endfor %}
   </div>
+  {% endif %}
   <div id="mypopup" class="myPopup">
     <div class="popup-content">
       <div class="popup-body">

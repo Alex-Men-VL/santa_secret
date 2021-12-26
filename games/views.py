@@ -25,16 +25,11 @@ class RegisterUser(CreateView):
         user.username = username
         user.save()
 
-        password = form.cleaned_data.get('password1')
-        user = authenticate(username=username, password=password)
         login(self.request, user)
-        return super(RegisterUser, self).form_valid(form)
-
-    def get_success_url(self):
         path = self.request.GET.get("next")
         if path:
-            return path
-        return reverse_lazy('index')
+            return redirect(path)
+        return redirect('index')
 
 
 class LoginUser(LoginView):

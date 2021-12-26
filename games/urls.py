@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('signup/', views.RegisterUser.as_view(), name='signup'),
     path('login/', views.LoginUser.as_view(), name='login'),
+    path('user/<int:pk>/account', views.UserAccount.as_view(), name='account'),
     path('logout/', views.logout_user, name='logout'),
     path('games/new_game/', views.GameCreate.as_view(), name='new_game'),
     path('games/my_games/', views.user_games, name='user_games'),

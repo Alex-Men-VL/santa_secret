@@ -12,15 +12,19 @@ from .models import COSTS, Game, Profile
 
 class RegisterUserForm(UserCreationForm):
     first_name = forms.CharField(
+        label='Имя',
         widget=forms.TextInput(attrs={'placeholder': 'Имя'}),
     )
     email = forms.EmailField(
+        label='Email',
         widget=forms.EmailInput(attrs={'placeholder': 'Email'}),
     )
     password1 = forms.CharField(
+        label='Пароль',
         widget=forms.PasswordInput(attrs={'placeholder': 'Пароль'}),
     )
     password2 = forms.CharField(
+        label='Повторите пароль',
         widget=forms.PasswordInput(attrs={'placeholder': 'Повторите пароль'}),
     )
 

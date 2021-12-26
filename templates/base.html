@@ -25,6 +25,7 @@
               Персональная информация
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <li class="dropdown-item"><a href="{% url 'account' pk=request.user.id %}" class="nav-link"><span class="text-danger">Мои данные</span></a></li>
               <li class="dropdown-item"><a href="{% url 'user_games' %}" class="nav-link"><span class="text-danger">Мои игры</span></a></li>
               <li class="dropdown-item"><a href="{% url 'user_preferences' pk=request.user.id %}" class="nav-link"><span class="text-danger">Мои предпочтения</span></a></li>
               <li class="dropdown-item"><a href="{% url 'logout' %}" class="nav-link"><span class="text-danger">Выход</span></a></li>

@@ -147,7 +147,7 @@ class GameEdit(UpdateView):
 
 def users_preferences(request):
     users = Profile.objects.exclude(preferences=None)
-    preferences = [user.preferences for user in users]
+    preferences = [user.preferences for user in users if user.preferences!='']
     context = {
         'preferences': preferences,
     }

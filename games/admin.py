@@ -12,6 +12,7 @@ class UserInline(admin.TabularInline):
 
 class GameAdmin(admin.ModelAdmin):
     list_display = ('title', 'slug')
+    list_filter = ['draw_done']
     inlines = [
         UserInline,
     ]
@@ -19,6 +20,7 @@ class GameAdmin(admin.ModelAdmin):
 
     @admin.action(description='Провести жеребьевку')
     def draw_lots_by_admin(self, request, queryset):
+        one_was_held = False
         for game in queryset:
             if game.draw_done:
                 self.message_user(
@@ -32,19 +34,22 @@ class GameAdmin(admin.ModelAdmin):
             if game.players_count < 3:
                 self.message_user(
                     request,
-                    f'Для жеребьевки игры (slug={game.slug})'
+                    f'Для жеребьевки игры (slug={game.slug}) '
                     'недостаточно игроков.',
                     messages.ERROR
                 )
                 continue
             send_email_to_players(players, game)
             game.draw_done = True
+            game.save()
+            one_was_held = True
 
-        self.message_user(
-            request,
-            'Жеребьевка проведена',
-            messages.SUCCESS
-        )
+        if one_was_held:
+            self.message_user(
+                request,
+                'Жеребьевка проведена',
+                messages.SUCCESS
+            )
 
 
 admin.site.register(Game, GameAdmin)

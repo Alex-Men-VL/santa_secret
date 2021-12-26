@@ -18,15 +18,21 @@ def index(request):
 class RegisterUser(CreateView):
     form_class = forms.RegisterUserForm
     template_name = 'register.html'
-    success_url = reverse_lazy('login')
 
     def form_valid(self, form):
         user = form.save(commit=False)
         username = form.cleaned_data['email'].split('@')[0]
         user.username = username
         user.save()
+
         login(self.request, user)
-        return redirect('index')
+        return super(RegisterUser, self).form_valid(form)
+
+    def get_success_url(self):
+        path = self.request.GET.get("next")
+        if path:
+            return path
+        return reverse_lazy('index')
 
 
 class LoginUser(LoginView):

@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'games.apps.GamesConfig',
+
+    'django_apscheduler',
 ]
 
 MIDDLEWARE = [

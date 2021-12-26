@@ -13,6 +13,8 @@ COSTS = (
     ('THIRD_RANGE', '1000-2000 рублей'),
 )
 
+COSTS_FORMATTED = {cost[0]: cost[1] for cost in COSTS}
+
 
 def get_slug():
     letters_and_digits = string.ascii_letters + string.digits
@@ -82,7 +84,7 @@ class Game(models.Model):
         default='ANY',
     )
     registration_end = models.DateField(
-        'Период регистрации участников',
+        'Дата закрытия регистрации',
     )
     dispatch_date = models.DateField(
         'Период отправки подарка',

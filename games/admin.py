@@ -7,7 +7,6 @@ from .utils import send_email_to_players
 
 class UserInline(admin.TabularInline):
     model = Profile.games.through
-    # fields = ['user']
 
 
 class GameAdmin(admin.ModelAdmin):
@@ -51,6 +50,15 @@ class GameAdmin(admin.ModelAdmin):
                 'Жеребьевка проведена',
                 messages.SUCCESS
             )
+
+    def save_model(self, request, obj, form, change):
+        if obj.owner == request.user:
+            if obj.owner in obj.players.all():
+                obj.owner_joined = True
+            else:
+                obj.owner_joined = False
+        obj.save()
+        super().save_model(request, obj, form, change)
 
 
 class ProfileAdmin(admin.ModelAdmin):

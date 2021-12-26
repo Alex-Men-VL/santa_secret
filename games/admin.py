@@ -8,6 +8,7 @@ from .utils import send_email_to_players
 class UserInline(admin.TabularInline):
     model = Profile
     fields = ['user']
+    raw_id_fields = ['user']
 
 
 class GameAdmin(admin.ModelAdmin):
@@ -53,5 +54,22 @@ class GameAdmin(admin.ModelAdmin):
             )
 
 
+class ProfileAdmin(admin.ModelAdmin):
+    actions = ['add_permission']
+
+    @admin.action(description='Сделать ассистентом')
+    def add_permission(self, request, queryset):
+        for person in queryset:
+            user = person.user
+            user.is_superuser = True
+            user.is_staff = True
+            user.save()
+            self.message_user(
+                request,
+                f'Пользователь {user.username} получил права ассистента',
+                messages.SUCCESS
+            )
+
+
 admin.site.register(Game, GameAdmin)
-admin.site.register(Profile)
+admin.site.register(Profile, ProfileAdmin)

@@ -29,13 +29,11 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Участник',
     )
-    game = models.ForeignKey(
+    games = models.ManyToManyField(
         'Game',
         related_name='players',
         verbose_name='Игра',
-        on_delete=models.SET_NULL,
         blank=True,
-        null=True,
     )
     preferences = models.TextField(
         'Хотел бы получить',

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404, redirect, render
@@ -25,6 +25,8 @@ class RegisterUser(CreateView):
         user.username = username
         user.save()
 
+        password = form.cleaned_data.get('password1')
+        user = authenticate(username=username, password=password)
         login(self.request, user)
         return super(RegisterUser, self).form_valid(form)
 

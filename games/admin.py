@@ -6,9 +6,8 @@ from .utils import send_email_to_players
 
 
 class UserInline(admin.TabularInline):
-    model = Profile
-    fields = ['user']
-    raw_id_fields = ['user']
+    model = Profile.games.through
+    # fields = ['user']
 
 
 class GameAdmin(admin.ModelAdmin):

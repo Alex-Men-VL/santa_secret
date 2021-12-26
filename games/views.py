@@ -1,13 +1,14 @@
 from django.conf import settings
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.shortcuts import get_list_or_404, get_object_or_404, redirect, \
+from django.shortcuts import get_object_or_404, redirect, \
     render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import CreateView, DeleteView, UpdateView
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from . import forms
 from .models import COSTS, Game, Profile
@@ -53,10 +54,13 @@ class LoginUser(LoginView):
         return reverse_lazy('index')
 
 
-class UserAccount(UpdateView):
+class UserAccount(LoginRequiredMixin, UpdateView):
     model = User
     template_name = 'registration/register.html'
     fields = ['first_name', 'email']
+
+    def get_object(self, queryset=None):
+        return User.objects.get(pk=self.request.user.id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -80,7 +84,7 @@ class UserAccount(UpdateView):
         return redirect('index')
 
 
-class GameCreate(CreateView):
+class GameCreate(LoginRequiredMixin, CreateView):
     model = Game
     template_name = 'games/game_edit.html'
     form_class = forms.AddGameForm
@@ -99,22 +103,23 @@ class GameCreate(CreateView):
         return super(GameCreate, self).form_valid(form)
 
 
-def user_games(request):
-    try:
-        user = request.user
-        games = Game.objects.filter(owner=user).order_by('-pk')
+class UserGames(LoginRequiredMixin, ListView):
+    model = Profile
+    template_name = 'games/user_games.html'
+    context_object_name = 'games'
+
+    def get_queryset(self):
+        return Game.objects.filter(owner=self.request.user).order_by('-pk')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=None, **kwargs)
+
         costs = {i[0]: i[1] for i in COSTS}
-        context = {
-            'games': games,
-            'games_count': games.count(),
+        context.update({
             'costs': costs,
             'base_url': settings.BASE_URL,
-        }
-    except TypeError:
-        context = {
-            'games_count': 0,
-        }
-    return render(request, 'games/user_games.html', context=context)
+        })
+        return context
 
 
 def logout_user(request):
@@ -122,10 +127,16 @@ def logout_user(request):
     return redirect('login')
 
 
-class GameDelete(DeleteView):
+class GameDelete(LoginRequiredMixin, DeleteView):
     model = Game
     template_name = 'games/game_delete.html'
     success_url = reverse_lazy('user_games')
+
+    def get(self, request, *args, **kwargs):
+        game = get_object_or_404(Game, slug=kwargs.get('slug'))
+        if request.user != game.owner:
+            return redirect('index')  # FIXME
+        return super().get(request, *args, **kwargs)
 
 
 @login_required
@@ -156,20 +167,29 @@ def game_join(request, slug):
     return render(request, 'games/join_success.html', context=context)
 
 
-class AddUserPrefers(UpdateView):
+class AddUserPrefers(LoginRequiredMixin, UpdateView):
     model = Profile
     template_name = 'games/user_preferences.html'
     form_class = forms.UsersPreferencesForm
+
+    def get_object(self, queryset=None):
+        return Profile.objects.get(user=self.request.user)
 
     def get_success_url(self):
         return reverse("index")
 
 
-class GameEdit(UpdateView):
+class GameEdit(LoginRequiredMixin, UpdateView):
     model = Game
     template_name = 'games/game_edit.html'
     form_class = forms.AddGameForm
     success_url = reverse_lazy('user_games')
+
+    def get(self, request, *args, **kwargs):
+        game = get_object_or_404(Game, slug=kwargs.get('slug'))
+        if request.user != game.owner:
+            return redirect('index')  # FIXME
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -180,10 +200,10 @@ class GameEdit(UpdateView):
         return context
 
 
-def users_preferences(request):
-    users = Profile.objects.exclude(preferences=None)
-    preferences = [user.preferences for user in users if user.preferences!='']
-    context = {
-        'preferences': preferences,
-    }
-    return render(request, 'games/preferences.html', context=context)
+class UsersPreferences(ListView):
+    model = Profile
+    template_name = 'games/preferences.html'
+    context_object_name = 'preferences'
+
+    def get_queryset(self):
+        return Profile.objects.exclude(preferences=None).exclude(preferences='')

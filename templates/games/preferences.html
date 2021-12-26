@@ -11,7 +11,7 @@
             <h4>Ни один пользователь не написал свой вишлист<br>Будь первым!</h4>
           </div>
           <div class="d-grid gap-2 col-3 mx-auto">
-            <a class="btn btn-danger" href="{% url 'user_preferences' pk=request.user.id %}" role="button">Добавить свои предпочтения</a>
+            <a class="btn btn-danger" href="{% url 'user_preferences' %}" role="button">Добавить свои предпочтения</a>
           </div>
         </div>
       {% endif %}

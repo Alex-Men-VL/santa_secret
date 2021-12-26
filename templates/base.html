@@ -19,15 +19,15 @@
       <ul class="nav nav-pills">
         {% if request.user.is_authenticated %}
           <li class="nav-item"><a href="{% url 'new_game' %}" class="nav-link"><span class="text-danger">Создать игру</span></a></li>
-          <li class="nav-item"><a href="{% url 'users_preferences' %}" class="nav-link"><span class="text-danger">Примеры вишлистов</span></a></li>
+          <li class="nav-item"><a href="{% url 'preferences' %}" class="nav-link"><span class="text-danger">Примеры вишлистов</span></a></li>
           <div class="dropdown">
             <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               Персональная информация
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-              <li class="dropdown-item"><a href="{% url 'account' pk=request.user.id %}" class="nav-link"><span class="text-danger">Мои данные</span></a></li>
+              <li class="dropdown-item"><a href="{% url 'account' %}" class="nav-link"><span class="text-danger">Мои данные</span></a></li>
               <li class="dropdown-item"><a href="{% url 'user_games' %}" class="nav-link"><span class="text-danger">Мои игры</span></a></li>
-              <li class="dropdown-item"><a href="{% url 'user_preferences' pk=request.user.id %}" class="nav-link"><span class="text-danger">Мои предпочтения</span></a></li>
+              <li class="dropdown-item"><a href="{% url 'user_preferences' %}" class="nav-link"><span class="text-danger">Мои предпочтения</span></a></li>
               <li class="dropdown-item"><a href="{% url 'logout' %}" class="nav-link"><span class="text-danger">Выход</span></a></li>
             </ul>
           </div>

@@ -145,7 +145,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 BASE_URL = env.str('BASE_URL', 'http://127.0.0.1:8000')
-LOGIN_URL = '/login/'
+LOGIN_URL = '/accounts/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')

@@ -4,8 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
-from django.shortcuts import get_object_or_404, redirect, \
+from django.shortcuts import (
+    get_object_or_404,
+    redirect,
     render
+)
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
@@ -135,7 +138,7 @@ class GameDelete(LoginRequiredMixin, DeleteView):
     def get(self, request, *args, **kwargs):
         game = get_object_or_404(Game, slug=kwargs.get('slug'))
         if request.user != game.owner:
-            return redirect('index')  # FIXME
+            return redirect('index')
         return super().get(request, *args, **kwargs)
 
 
@@ -188,7 +191,7 @@ class GameEdit(LoginRequiredMixin, UpdateView):
     def get(self, request, *args, **kwargs):
         game = get_object_or_404(Game, slug=kwargs.get('slug'))
         if request.user != game.owner:
-            return redirect('index')  # FIXME
+            return redirect('index')
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -207,3 +210,10 @@ class UsersPreferences(ListView):
 
     def get_queryset(self):
         return Profile.objects.exclude(preferences=None).exclude(preferences='')
+
+
+def csrf_failure(request, reason=""):
+    context = RequestContext(request)
+    response = render(request, '403.html', context)
+    response.status_code = 403
+    return response

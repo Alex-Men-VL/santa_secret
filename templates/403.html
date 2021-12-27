@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block context %}
+  <div class="container">
+    <div class="py-5 text-center">
+      <h2>Запрашиваемая страница доступна только для авторизованных пользователей</h2>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col">
+        <h4 class="py-3 text-center">
+          Войдите на сайт, чтобы получить доступ к этой странице
+        </h4>
+        <div class="d-grid gap-2 col-3 mx-auto">
+          <a class="btn btn-danger" href="{% url 'login' %}?next={{ next }}" role="button">Вход и регистрация</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

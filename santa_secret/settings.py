@@ -62,6 +62,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'santa_secret.urls'
 
+CSRF_FAILURE_VIEW = 'games.views.csrf_failure'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

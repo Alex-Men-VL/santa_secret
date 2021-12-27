@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, send_mass_mail
 
 from .models import COSTS_FORMATTED
 
@@ -42,17 +42,27 @@ def send_email_to_owner(owner_email, game_title):
 
 
 def send_email_to_players(players, game):
+    emails = []
+    subject = 'Жеребьевка в игре "Тайный Санта"'
     for player_number in range(game.players_count - 1):
         sender = players[player_number]
         recipient = players[player_number + 1]
-        send_alert(sender, recipient, game)
+        message = get_email_message(recipient, game)
+        emails.append(
+            (subject, message, settings.DEFAULT_FROM_EMAIL, [sender.user.email])
+        )
 
     sender = players[game.players_count - 1]
     recipient = players[0]
-    send_alert(sender, recipient, game)
+    message = get_email_message(recipient, game)
+    emails.append(
+        (subject, message, settings.DEFAULT_FROM_EMAIL, [sender.user.email])
+    )
+
+    send_mass_mail(tuple(emails), fail_silently=False)
 
 
-def send_alert(sender, recipient, game):
+def get_email_message(recipient, game):
     if recipient.preferences:
         preferences = recipient.preferences
     else:
@@ -61,19 +71,13 @@ def send_alert(sender, recipient, game):
         not_preferences = recipient.not_preferences
     else:
         not_preferences = 'Рад всему'
-
-    send_mail(
-        'Жеребьевка в игре "Тайный Санта"',
-        EMAIL_TEMPLATE_COMMON.format(
-            name=recipient.user.first_name,
-            email=recipient.user.email,
-            preferences=preferences,
-            not_preferences=not_preferences,
-            our_site=settings.BASE_URL,
-            cost_limit=COSTS_FORMATTED[game.cost_limit],
-            dispatch_date=game.dispatch_date
-        ),
-        settings.EMAIL_HOST_USER,
-        [sender.user.email],
-        fail_silently=False,
+    message = EMAIL_TEMPLATE_COMMON.format(
+        name=recipient.user.first_name,
+        email=recipient.user.email,
+        preferences=preferences,
+        not_preferences=not_preferences,
+        our_site=settings.BASE_URL,
+        cost_limit=COSTS_FORMATTED[game.cost_limit],
+        dispatch_date=game.dispatch_date
     )
+    return message

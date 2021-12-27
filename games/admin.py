@@ -53,7 +53,7 @@ class GameAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if obj.owner == request.user:
-            if obj.owner in obj.players.all():
+            if obj.owner in [user.user for user in obj.players.all()]:
                 obj.owner_joined = True
             else:
                 obj.owner_joined = False

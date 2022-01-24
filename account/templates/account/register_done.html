@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block context %}
+  <div class="container">
+    <div class="py-5 text-center">
+      <h2>Добро пожаловать</h2>
+    </div>
+    <div>
+      <p>Ваша учетная запись успешно создана. Теперь вы можете <a href="{% url "login" %}">войти в систему</a>.</p>
+    </div>
+  </div>
+{% endblock %}

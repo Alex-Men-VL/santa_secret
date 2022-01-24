@@ -12,22 +12,22 @@
 <body>
   <div class="container">
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+      <a href="/games" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
         <span class="fs-4">🎅🏻Тайный Санта</span>
       </a>
 
       <ul class="nav nav-pills">
         {% if request.user.is_authenticated %}
-          <li class="nav-item"><a href="{% url 'new_game' %}" class="nav-link"><span class="text-danger">Создать игру</span></a></li>
-          <li class="nav-item"><a href="{% url 'preferences' %}" class="nav-link"><span class="text-danger">Примеры вишлистов</span></a></li>
+          <li class="nav-item"><a href="{% url 'games:new' %}" class="nav-link"><span class="text-danger">Создать игру</span></a></li>
+          <li class="nav-item"><a href="{% url 'games:preferences' %}" class="nav-link"><span class="text-danger">Примеры вишлистов</span></a></li>
           <div class="dropdown">
             <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               Персональная информация
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-              <li class="dropdown-item"><a href="{% url 'account' %}" class="nav-link"><span class="text-danger">Мои данные</span></a></li>
-              <li class="dropdown-item"><a href="{% url 'user_games' %}" class="nav-link"><span class="text-danger">Мои игры</span></a></li>
-              <li class="dropdown-item"><a href="{% url 'user_preferences' %}" class="nav-link"><span class="text-danger">Мои предпочтения</span></a></li>
+              <li class="dropdown-item"><a href="{% url 'edit' %}" class="nav-link"><span class="text-danger">Мои данные</span></a></li>
+              <li class="dropdown-item"><a href="{% url 'games:user_games' %}" class="nav-link"><span class="text-danger">Мои игры</span></a></li>
+              <li class="dropdown-item"><a href="{% url 'games:user_preferences' %}" class="nav-link"><span class="text-danger">Мои предпочтения</span></a></li>
               <li class="dropdown-item"><a href="{% url 'logout' %}" class="nav-link"><span class="text-danger">Выход</span></a></li>
             </ul>
           </div>

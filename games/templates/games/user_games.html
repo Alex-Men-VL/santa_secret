@@ -7,7 +7,7 @@
         <h2>У вас пока нет созданных игр</h2>
       </div>
       <div class="d-grid gap-2 col-3 mx-auto">
-        <a class="btn btn-danger" href="{% url 'new_game' %}" role="button">Создать игру</a>
+        <a class="btn btn-danger" href="{% url 'games:new' %}" role="button">Создать игру</a>
       </div>
     </div>
   {% else %}
@@ -29,7 +29,7 @@
         {% if game.owner_joined %}
           <p class="card-text">Вы присоединились к игре</p>
         {% endif %}
-        {% url 'game_join' slug=game.slug as the_url %}
+        {% url 'games:join' slug=game.slug as the_url %}
         <fieldset disabled>
           <div class="ml-0 mb-3 col-md-6">
             <label for="disabledTextInput" class="form-label" id="popupBtn">Ссылка на игру</label>
@@ -37,10 +37,10 @@
           </div>
         </fieldset>
         {% if not game.owner_joined %}
-          <a href="{% url 'game_join' slug=game.slug %}" class="btn btn-danger mb-3">Присоединиться к игре</a>
+          <a href="{% url 'games:join' slug=game.slug %}" class="btn btn-danger mb-3">Присоединиться к игре</a>
         {% endif %}
-        <a href="{% url 'game_edit' slug=game.slug %}" class="btn btn-danger mb-3">Изменить игру</a>
-        <a href="{% url 'game_delete' slug=game.slug %}" class="btn btn-danger mb-3">Удалить игру</a>
+        <a href="{% url 'games:edit' slug=game.slug %}" class="btn btn-danger mb-3">Изменить игру</a>
+        <a href="{% url 'games:delete' slug=game.slug %}" class="btn btn-danger mb-3">Удалить игру</a>
       </div>
     </div>
   {% endfor %}

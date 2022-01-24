@@ -8,8 +8,8 @@
     <h4>С паролем:</h4>
     <div class="alert alert-primary" role="alert">
       Нет аккаунта?
-      <a href="{% url 'signup' %}?next={{ next }}">Зарегистрироваться</a><br>
-      <a href="{% url 'reset_password' %}">Забыли пароль?</a><br>
+      <a href="{% url 'register' %}?next={{ next }}">Зарегистрироваться</a><br>
+      <a href="{% url 'password_reset' %}">Забыли пароль?</a><br>
     </div>
    <form method="post">
     {% csrf_token %}

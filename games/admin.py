@@ -1,8 +1,8 @@
 from django.contrib import admin, messages
 
-
-from .models import Profile, Game
+from account.models import Profile
 from .email_utils import send_email_to_players
+from .models import Game
 
 
 class UserInline(admin.TabularInline):

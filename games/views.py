@@ -1,97 +1,31 @@
 from django.conf import settings
-from django.contrib.auth import login, logout
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
 from django.shortcuts import (
     get_object_or_404,
     redirect,
     render
 )
+from django.template import RequestContext
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
+from account.models import Profile
 from . import forms
-from .models import COSTS, Game, Profile
+from .models import COSTS, Game
 
 
 def index(request):
     return render(request, 'games/index.html')
 
 
-class RegisterUser(CreateView):
-    form_class = forms.RegisterUserForm
-    template_name = 'registration/register.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'title': 'Регистрация',
-            'button': 'Зарегистрироваться',
-        })
-        return context
-
-    def form_valid(self, form):
-        user = form.save(commit=False)
-        username = form.cleaned_data['email'].split('@')[0]
-        user.username = username
-        user.save()
-
-        login(self.request, user)
-        path = self.request.GET.get("next")
-        if path:
-            return redirect(path)
-        return redirect('index')
-
-
-class LoginUser(LoginView):
-    form_class = forms.LoginUserForm
-    template_name = 'registration/login.html'
-
-    def get_success_url(self):
-        path = self.request.GET.get("next")
-        if path:
-            return path
-        return reverse_lazy('index')
-
-
-class UserAccount(LoginRequiredMixin, UpdateView):
-    model = User
-    template_name = 'registration/register.html'
-    fields = ['first_name', 'email']
-
-    def get_object(self, queryset=None):
-        return User.objects.get(pk=self.request.user.id)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'title': 'Личные данные',
-            'button': 'Сохранить',
-            'user_id': kwargs.get('pk'),
-        })
-        return context
-
-    def form_valid(self, form):
-        user = form.save(commit=False)
-        username = form.cleaned_data['email'].split('@')[0]
-        user.username = username
-        user.save()
-
-        login(self.request, user)
-        path = self.request.GET.get("next")
-        if path:
-            return redirect(path)
-        return redirect('index')
-
-
 class GameCreate(LoginRequiredMixin, CreateView):
     model = Game
     template_name = 'games/game_edit.html'
     form_class = forms.AddGameForm
-    success_url = reverse_lazy('user_games')
+    success_url = reverse_lazy('games:user_games')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -125,20 +59,15 @@ class UserGames(LoginRequiredMixin, ListView):
         return context
 
 
-def logout_user(request):
-    logout(request)
-    return redirect('login')
-
-
 class GameDelete(LoginRequiredMixin, DeleteView):
     model = Game
     template_name = 'games/game_delete.html'
-    success_url = reverse_lazy('user_games')
+    success_url = reverse_lazy('games:user_games')
 
     def get(self, request, *args, **kwargs):
         game = get_object_or_404(Game, slug=kwargs.get('slug'))
         if request.user != game.owner:
-            return redirect('index')
+            return redirect('games:index')
         return super().get(request, *args, **kwargs)
 
 
@@ -174,24 +103,22 @@ class AddUserPrefers(LoginRequiredMixin, UpdateView):
     model = Profile
     template_name = 'games/user_preferences.html'
     form_class = forms.UsersPreferencesForm
+    success_url = reverse_lazy('games:index')
 
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
-
-    def get_success_url(self):
-        return reverse("index")
 
 
 class GameEdit(LoginRequiredMixin, UpdateView):
     model = Game
     template_name = 'games/game_edit.html'
     form_class = forms.AddGameForm
-    success_url = reverse_lazy('user_games')
+    success_url = reverse_lazy('games:user_games')
 
     def get(self, request, *args, **kwargs):
         game = get_object_or_404(Game, slug=kwargs.get('slug'))
         if request.user != game.owner:
-            return redirect('index')
+            return redirect('games:index')
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

@@ -21,7 +21,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('games.urls')),
+    path('games/', include('games.urls', namespace='games')),
+    path('account/', include('account.urls')),
 ]
 
 if settings.DEBUG and settings.MEDIA_ROOT:

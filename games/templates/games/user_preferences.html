@@ -8,7 +8,7 @@
       <div class="row justify-content-center">
         <div class="col">
           {% if request.user.is_authenticated %}
-            <form action="{% url 'user_preferences' %}" method="post">
+            <form action="{% url 'games:user_preferences' %}" method="post">
               {% csrf_token %}
               {% for f in form %}
                 <div class="mb-4">
@@ -24,7 +24,7 @@
               </div>
             </form>
           {% else %}
-            <h3>Перед созданием игры необходимо <a href="{% url 'login' %}">авторизоваться.</a></h3>
+            <h3>Перед созданием игры необходимо <a href="{% url 'account:login' %}">авторизоваться.</a></h3>
           {% endif %}
         </div>
       </div>
